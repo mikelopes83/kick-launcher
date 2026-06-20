@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kick Launcher — Automated Stream Clip Agent</title>
+<meta name="description" content="Kick Launcher automatically captures, edits, and posts your best stream moments to TikTok, Instagram, Twitter and more. $19.99/month.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#53FC18;
+  --purple:#8B5CF6;
+  --bg:#08080a;
+  --card:#0f0f12;
+  --card2:#141417;
+  --border:#1e1e24;
+  --text:#ffffff;
+  --muted:#6b7280;
+  --muted2:#374151;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,10,.85);
+    backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+    padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-kl{font-size:26px;font-weight:900;color:var(--green);line-height:1}
+.nav-kl span{color:var(--purple)}
+.nav-name{font-size:16px;font-weight:700;color:white}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:white}
+.nav-cta{background:var(--green);color:#000;border:none;padding:10px 22px;
+         border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;
+         text-decoration:none;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;text-align:center;padding:100px 24px 60px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+              width:900px;height:900px;background:radial-gradient(circle,rgba(83,252,24,.07) 0%,transparent 65%);
+              pointer-events:none}
+.hero::after{content:"";position:absolute;bottom:-100px;right:-100px;
+             width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.06) 0%,transparent 65%);
+             pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(83,252,24,.08);
+            border:1px solid rgba(83,252,24,.2);color:var(--green);
+            padding:6px 14px;border-radius:100px;font-size:12px;font-weight:700;
+            letter-spacing:.05em;text-transform:uppercase;margin-bottom:28px}
+.hero-badge::before{content:"";width:7px;height:7px;border-radius:50%;
+                    background:var(--green);box-shadow:0 0 8px var(--green)}
+h1{font-size:clamp(40px,7vw,80px);font-weight:900;line-height:1.05;
+   letter-spacing:-.03em;margin-bottom:24px;max-width:900px}
+h1 .green{color:var(--green)}
+h1 .purple{color:var(--purple)}
+.hero-sub{font-size:clamp(16px,2.5vw,22px);color:var(--muted);max-width:600px;
+          line-height:1.6;margin-bottom:44px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:60px}
+.btn-primary{background:var(--green);color:#000;border:none;padding:16px 36px;
+             border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;
+             text-decoration:none;transition:opacity .2s,transform .1s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:white;border:1px solid var(--border);
+               padding:16px 36px;border-radius:10px;font-size:16px;font-weight:700;
+               cursor:pointer;text-decoration:none;transition:background .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{background:var(--card)}
+.hero-platforms{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.hero-platforms span{font-size:12px;color:var(--muted)}
+.platform-pill{background:var(--card);border:1px solid var(--border);
+               padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;color:var(--muted)}
+
+/* ── SECTION LAYOUT ── */
+section{padding:96px 24px;max-width:1100px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+               color:var(--green);margin-bottom:12px}
+h2{font-size:clamp(28px,4vw,48px);font-weight:900;line-height:1.1;
+   letter-spacing:-.02em;margin-bottom:16px}
+h2 .accent{color:var(--green)}
+.section-sub{font-size:17px;color:var(--muted);max-width:540px;line-height:1.6;margin-bottom:56px}
+
+/* ── FEATURES GRID ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2px;
+               background:var(--border);border-radius:16px;overflow:hidden}
+.feature-card{background:var(--card);padding:32px;transition:background .2s}
+.feature-card:hover{background:var(--card2)}
+.feat-icon{font-size:28px;margin-bottom:16px}
+.feat-title{font-size:18px;font-weight:800;margin-bottom:8px}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* ── HOW IT WORKS ── */
+.steps{display:flex;flex-direction:column;gap:2px;background:var(--border);
+       border-radius:16px;overflow:hidden;margin-bottom:0}
+.step{background:var(--card);padding:28px 32px;display:flex;align-items:flex-start;gap:20px}
+.step:hover{background:var(--card2)}
+.step-num{width:36px;height:36px;border-radius:8px;background:rgba(83,252,24,.1);
+          border:1px solid rgba(83,252,24,.2);color:var(--green);
+          font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-body h3{font-size:17px;font-weight:800;margin-bottom:6px}
+.step-body p{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* ── PRICING ── */
+.pricing-wrapper{display:flex;justify-content:center}
+.pricing-card{background:var(--card);border:1px solid var(--border);border-radius:20px;
+              padding:48px;max-width:460px;width:100%;text-align:center;position:relative;overflow:hidden}
+.pricing-card::before{content:"";position:absolute;top:-80px;left:50%;transform:translateX(-50%);
+                       width:300px;height:300px;background:radial-gradient(circle,rgba(83,252,24,.06) 0%,transparent 70%);
+                       pointer-events:none}
+.pricing-badge{display:inline-block;background:rgba(83,252,24,.1);border:1px solid rgba(83,252,24,.25);
+               color:var(--green);padding:5px 14px;border-radius:100px;
+               font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px}
+.price-amount{font-size:72px;font-weight:900;line-height:1;letter-spacing:-.03em;margin-bottom:6px}
+.price-amount sup{font-size:32px;font-weight:700;vertical-align:top;margin-top:14px;margin-right:2px}
+.price-period{color:var(--muted);font-size:15px;margin-bottom:32px}
+.price-features{list-style:none;margin-bottom:36px;text-align:left}
+.price-features li{padding:10px 0;border-bottom:1px solid var(--border);
+                   font-size:15px;display:flex;align-items:center;gap:10px}
+.price-features li:last-child{border-bottom:none}
+.price-features li::before{content:"✓";color:var(--green);font-weight:900;font-size:14px;flex-shrink:0}
+.btn-checkout{display:block;width:100%;background:var(--green);color:#000;border:none;
+              padding:18px;border-radius:12px;font-size:17px;font-weight:900;cursor:pointer;
+              text-decoration:none;transition:opacity .2s,transform .1s;margin-bottom:14px}
+.btn-checkout:hover{opacity:.9;transform:translateY(-1px)}
+.price-note{font-size:12px;color:var(--muted)}
+
+/* ── PLATFORMS ── */
+.platforms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.platform-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+               padding:24px;text-align:center;transition:border-color .2s}
+.platform-card:hover{border-color:var(--green)}
+.platform-icon{font-size:32px;margin-bottom:10px}
+.platform-name{font-size:14px;font-weight:700}
+.platform-detail{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* ── FAQ ── */
+.faq-list{display:flex;flex-direction:column;gap:2px;background:var(--border);
+          border-radius:16px;overflow:hidden}
+.faq-item{background:var(--card);padding:24px 28px;cursor:pointer}
+.faq-item:hover{background:var(--card2)}
+.faq-q{font-size:16px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q::after{content:"+";color:var(--green);font-size:22px;flex-shrink:0;transition:transform .2s}
+.faq-item.open .faq-q::after{transform:rotate(45deg)}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .3s,margin .3s}
+.faq-item.open .faq-a{max-height:300px;margin-top:12px}
+
+/* ── CTA BANNER ── */
+.cta-banner{background:linear-gradient(135deg,rgba(83,252,24,.08),rgba(139,92,246,.08));
+            border:1px solid var(--border);border-radius:20px;padding:64px 48px;
+            text-align:center;margin:0 24px 96px}
+.cta-banner h2{margin-bottom:12px}
+.cta-banner p{color:var(--muted);font-size:17px;margin-bottom:36px}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:32px 24px;
+       display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand{font-size:20px;font-weight:900;color:var(--green)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}
+.footer-links a:hover{color:white}
+.footer-copy{color:var(--muted2);font-size:12px;width:100%;text-align:center}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  nav .nav-links{display:none}
+  .hero{padding:80px 20px 40px}
+  .hero-btns{flex-direction:column;align-items:center}
+  .btn-primary,.btn-secondary{width:100%;justify-content:center}
+  section{padding:64px 20px}
+  .pricing-card{padding:32px 24px}
+  .cta-banner{padding:40px 24px}
+  footer{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <span class="nav-kl">K<span>L</span></span>
+    <span class="nav-name">Kick Launcher</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#platforms">Platforms</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a class="nav-cta" href="#pricing">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Live on Kick</div>
+  <h1>Your Stream.<br><span class="green">Auto-Clipped.</span><br><span class="purple">Everywhere.</span></h1>
+  <p class="hero-sub">Kick Launcher watches your stream, captures the best moments, edits them automatically, and posts to every platform — while you focus on playing.</p>
+  <div class="hero-btns">
+    <a class="btn-primary" href="#pricing">&#9654; Start for $19.99/mo</a>
+    <a class="btn-secondary" href="#how-it-works">See How It Works</a>
+  </div>
+  <div class="hero-platforms">
+    <span>Posts to:</span>
+    <span class="platform-pill">TikTok</span>
+    <span class="platform-pill">Instagram</span>
+    <span class="platform-pill">Twitter / X</span>
+    <span class="platform-pill">Facebook</span>
+    <span class="platform-pill">YouTube</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">Features</div>
+  <h2>Everything you need to <span class="accent">go viral</span></h2>
+  <p class="section-sub">One app handles your entire clip workflow — from stream to social media in minutes.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feat-icon">&#127909;</div>
+      <div class="feat-title">Auto Clip Capture</div>
+      <p class="feat-desc">Kick Launcher monitors your Kick stream and automatically captures clips when triggered by chat commands, view spikes, or on a timer.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#9999;</div>
+      <div class="feat-title">AI Auto-Captions</div>
+      <p class="feat-desc">Whisper AI transcribes your audio and burns accurate captions directly into your clips — no manual editing required.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#128247;</div>
+      <div class="feat-title">Vertical Crop for Shorts</div>
+      <p class="feat-desc">Automatically converts 16:9 gameplay into 9:16 vertical format optimized for TikTok, Instagram Reels, and YouTube Shorts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#128640;</div>
+      <div class="feat-title">One-Click Multi-Upload</div>
+      <p class="feat-desc">Post your clip to TikTok, Instagram, Twitter/X, Facebook, and YouTube simultaneously with one click — or schedule it for later.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#128241;</div>
+      <div class="feat-title">Mobile Remote Control</div>
+      <p class="feat-desc">Control your stream and approve clips from your phone anywhere in the world via the built-in mobile dashboard.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#128197;</div>
+      <div class="feat-title">Scheduled Posting</div>
+      <p class="feat-desc">Queue clips and images to post at specific dates and times across all your platforms automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#127381;</div>
+      <div class="feat-title">Custom Branding</div>
+      <p class="feat-desc">Add your logo watermark, custom fonts, colors, and intro/outro to every clip automatically — consistent branding every time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#128172;</div>
+      <div class="feat-title">Chat Monitor</div>
+      <p class="feat-desc">Watch Kick and Twitch chat simultaneously. Trigger clips from chat commands like !clip or set auto-clip on viewer surges.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">&#127381;</div>
+      <div class="feat-title">Multi-Stream Monitor</div>
+      <p class="feat-desc">Monitor Kick, Twitch, and YouTube Live at the same time. Never miss a highlight across any of your streams.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="section-label">How It Works</div>
+  <h2>Set it up once.<br><span class="accent">Run forever.</span></h2>
+  <p class="section-sub">Kick Launcher runs in the background while you stream. No extra work required.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Download &amp; Activate</h3>
+        <p>Download Kick Launcher, enter your subscription key, and connect your social accounts once in the settings panel.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Go Live on Kick</h3>
+        <p>Hit Start Capture in Kick Launcher before you go live. The app watches your stream in real-time.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Clips Get Captured Automatically</h3>
+        <p>Type !clip in chat, set a timer, or let Kick Launcher detect big moments. Clips are saved instantly to your queue.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>AI Edits the Clip</h3>
+        <p>Captions are transcribed, your branding is applied, and the clip is cropped to vertical format — fully automatic.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3>Posted to Every Platform</h3>
+        <p>Approve the clip and it uploads to TikTok, Instagram, Twitter/X, Facebook, and YouTube simultaneously. Or schedule it for peak hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section id="platforms">
+  <div class="section-label">Platforms</div>
+  <h2>Post <span class="accent">everywhere</span><br>at once</h2>
+  <p class="section-sub">One clip, every platform, zero extra effort.</p>
+  <div class="platforms-grid">
+    <div class="platform-card">
+      <div class="platform-icon">&#127381;</div>
+      <div class="platform-name">TikTok</div>
+      <div class="platform-detail">Auto-upload</div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">&#128247;</div>
+      <div class="platform-name">Instagram</div>
+      <div class="platform-detail">Reels + Posts</div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">&#128140;</div>
+      <div class="platform-name">Twitter / X</div>
+      <div class="platform-detail">Video tweets</div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">&#128101;</div>
+      <div class="platform-name">Facebook</div>
+      <div class="platform-detail">Page posts</div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">&#9654;</div>
+      <div class="platform-name">YouTube</div>
+      <div class="platform-detail">Shorts + Videos</div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">&#127910;</div>
+      <div class="platform-name">Kick</div>
+      <div class="platform-detail">Stream source</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="text-align:center">
+  <div class="section-label">Pricing</div>
+  <h2>Simple, flat pricing</h2>
+  <p class="section-sub" style="margin:0 auto 48px">Everything included. Cancel anytime.</p>
+  <div class="pricing-wrapper">
+    <div class="pricing-card">
+      <div class="pricing-badge">Monthly Subscription</div>
+      <div class="price-amount"><sup>$</sup>19<span style="font-size:40px">.99</span></div>
+      <div class="price-period">per month &nbsp;&bull;&nbsp; cancel anytime</div>
+      <ul class="price-features">
+        <li>Unlimited clip captures</li>
+        <li>AI auto-captions (Whisper)</li>
+        <li>Auto vertical crop for Shorts</li>
+        <li>Post to 5 platforms simultaneously</li>
+        <li>Scheduled posting queue</li>
+        <li>Mobile remote control</li>
+        <li>Custom branding &amp; watermarks</li>
+        <li>Multi-stream monitoring</li>
+        <li>Email support</li>
+      </ul>
+      <!-- Replace YOUR_STRIPE_LINK with your actual Stripe Payment Link URL -->
+      <a class="btn-checkout" href="YOUR_STRIPE_LINK" id="checkout-btn">Subscribe Now &rarr;</a>
+      <p class="price-note">Secure payment via Stripe &nbsp;&bull;&nbsp; You'll receive your activation key by email</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-label">FAQ</div>
+  <h2>Common <span class="accent">questions</span></h2>
+  <p class="section-sub">Everything you need to know before subscribing.</p>
+  <div class="faq-list">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What is Kick Launcher?</div>
+      <div class="faq-a">Kick Launcher is a Windows desktop app that automatically captures clips from your Kick stream, edits them with AI captions and your branding, and posts them to TikTok, Instagram, Twitter/X, Facebook, and YouTube — all without you doing anything manually.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How do I get my activation key after subscribing?</div>
+      <div class="faq-a">After your payment is confirmed, your unique activation key will be emailed to you within minutes. Paste it into the Kick Launcher activation screen to unlock the app.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What happens when my subscription expires?</div>
+      <div class="faq-a">Kick Launcher will show a subscription expired screen when you open it. Simply renew your subscription and you'll receive a new key to re-activate. All your settings and connected accounts are preserved.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Does it work with Twitch and YouTube Live too?</div>
+      <div class="faq-a">Yes! Kick Launcher can monitor Kick, Twitch, and YouTube Live simultaneously. Kick is the primary focus but multi-platform stream monitoring is built in.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What are the system requirements?</div>
+      <div class="faq-a">Kick Launcher runs on Windows 10/11 (64-bit). You need Python 3.11+ installed, or use the standalone .exe version that requires no Python. A stable internet connection is required for uploading clips.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I cancel my subscription?</div>
+      <div class="faq-a">Yes, cancel anytime. Your subscription key stays active until the end of the billing period you already paid for. No refunds on partial months, but you keep access until expiry.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is my social media data safe?</div>
+      <div class="faq-a">Yes. Kick Launcher stores all your API credentials locally on your own computer in a config file. Nothing is sent to our servers. You control your own data at all times.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="section-label" style="margin-bottom:16px">Ready to grow?</div>
+  <h2>Stop leaving clips on the table</h2>
+  <p>Your best moments are happening right now. Let Kick Launcher capture them.</p>
+  <a class="btn-primary" href="YOUR_STRIPE_LINK" style="display:inline-flex">Get Started for $19.99/mo &rarr;</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">KL</div>
+  <div class="footer-links">
+    <a href="terms.html">Terms of Service</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="mailto:mike.lopes83@gmail.com">Support</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 Kick Launcher. All rights reserved.</div>
+</footer>
+
+<script>
+function toggleFaq(el) {
+  el.classList.toggle("open");
+}
+</script>
+</body>
+</html>
